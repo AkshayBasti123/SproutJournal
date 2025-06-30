@@ -3,7 +3,7 @@ if (!username) window.location.href = "index.html";
 
 const today = new Date().toISOString().split("T")[0];
 const userKey = `user_${username}`;
-let userData = JSON.parse(localStorage.getItem(userKey)) || {};
+let userData = JSON.parse(localStorage.getItem(userKey)) || { entries: [], loginDates: [] };
 
 function updateStreakAndPlant() {
   if (!userData.loginDates.includes(today)) {
@@ -13,15 +13,23 @@ function updateStreakAndPlant() {
   const stage = Math.min(streak, 7);
   document.getElementById("plant-stage").src = `images/growth_stage_${stage}.png`;
 
-  // Set weather background if available
   const todayEntry = userData.entries.find(e => e.date === today);
   if (todayEntry) {
-    document.body.className = `weather-${todayEntry.weather}`;
+    document.body.classList.add(`weather-${todayEntry.weather}`);
   }
 
   localStorage.setItem(userKey, JSON.stringify(userData));
 }
-updateStreakAndPlant();
+
+function renderEntries() {
+  const list = document.getElementById("entry-log");
+  list.innerHTML = "";
+  userData.entries.sort((a, b) => b.date.localeCompare(a.date)).forEach(entry => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${entry.title}</strong> (${entry.date})<br><em>${entry.category}</em> — ${entry.weather}<br>${entry.content}`;
+    list.appendChild(li);
+  });
+}
 
 document.getElementById("entry-form").addEventListener("submit", function (e) {
   e.preventDefault();
@@ -39,16 +47,5 @@ document.getElementById("entry-form").addEventListener("submit", function (e) {
   this.reset();
 });
 
-function renderEntries() {
-  const list = document.getElementById("entry-log");
-  list.innerHTML = "";
-  userData.entries.sort((a, b) => b.date.localeCompare(a.date));
-  userData.entries.forEach(entry => {
-    const li = document.createElement("li");
-    li.innerHTML = `<strong>${entry.title}</strong> (${entry.date})<br>
-                    <em>${entry.category}</em> — ${entry.weather}<br>
-                    ${entry.content}`;
-    list.appendChild(li);
-  });
-}
+updateStreakAndPlant();
 renderEntries();
