@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const currentUser = localStorage.getItem('currentUser');
   const entriesKey = `entries_${currentUser}`;
+  const stageKey = `plant_stage_${currentUser}`;
+  const dateKey = `plant_lastUpdate_${currentUser}`;
 
   // 🌸 Load past entries
   function loadEntries() {
@@ -16,6 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
       li.innerHTML = `<strong>${entry.title}</strong> (${entry.category})<br>${entry.content}`;
       entryLog.appendChild(li);
     });
+  }
+
+  // 🪴 Only grow plant once per calendar day
+  function updatePlantStageIfNewDay() {
+    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+    let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
+    const lastUpdateDate = localStorage.getItem(dateKey);
+
+    if (lastUpdateDate !== today && currentStage < 7) {
+      currentStage += 1;
+      localStorage.setItem(stageKey, currentStage);
+      localStorage.setItem(dateKey, today);
+    }
+
+    const imgPath = `images/hibiscus${currentStage}.png`;
+    plantImg.src = imgPath;
+    plantImg.alt = `Hibiscus stage ${currentStage}`;
+    plantImg.classList.add('grow');
+    setTimeout(() => plantImg.classList.remove('grow'), 500);
   }
 
   // 🌼 Save a new entry
@@ -37,32 +59,22 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('weather-sunny', 'weather-cloudy', 'weather-rainy', 'weather-snowy', 'weather-windy');
     document.body.classList.add(`weather-${weather}`);
 
-    // 🪴 Update plant stage
-    updatePlantStage(entries.length);
+    // 🪴 Check plant growth only if it’s a new day
+    updatePlantStageIfNewDay();
 
     entryForm.reset();
     loadEntries();
   });
 
-  // 🌱 Load plant based on number of entries (7 stages)
-  function updatePlantStage(entryCount) {
-    const stage = Math.min(entryCount, 7);
-    const imgPath = `images/hibiscus${stage}.png`; // ✅ using your filenames
-    plantImg.src = imgPath;
-    plantImg.alt = `Hibiscus stage ${stage}`;
-    plantImg.classList.add('grow');
-    setTimeout(() => plantImg.classList.remove('grow'), 500);
-  }
-
   // 🔄 Init
   loadEntries();
-  const savedEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
 
-  // Set initial weather theme based on last entry (optional)
+  // Set weather theme to last used one
+  const savedEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
   if (savedEntries.length > 0) {
     const lastWeather = savedEntries[savedEntries.length - 1].weather;
     document.body.classList.add(`weather-${lastWeather}`);
   }
 
-  updatePlantStage(savedEntries.length);
+  updatePlantStageIfNewDay(); // Check on load
 });
