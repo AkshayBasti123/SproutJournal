@@ -1,4 +1,4 @@
-/* Reset & Base */
+/* 🌸 RESET & BASE STYLES */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,16 +6,15 @@
 }
 
 html, body {
-  height: auto;
+  font-family: 'Segoe UI', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  font-family: 'Segoe UI', sans-serif;
   background-color: black;
   color: pink;
 }
 
-/* FLOWER BACKGROUND */
+/* 🌸 FLOWER BACKGROUND ANIMATION */
 body.flower-bg {
   position: relative;
   background: black;
@@ -27,6 +26,8 @@ body.flower-bg {
 body.flower-bg::before {
   content: '';
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-image: radial-gradient(circle, rgba(255, 182, 193, 0.4) 1px, transparent 1px);
@@ -36,7 +37,6 @@ body.flower-bg::before {
   pointer-events: none;
 }
 
-/* Animate flower dots diagonally */
 @keyframes moveFlowers {
   0% {
     background-position: 0 0;
@@ -46,20 +46,28 @@ body.flower-bg::before {
   }
 }
 
-/* Containers */
+/* 🌸 AUTH AND DASHBOARD CONTAINERS */
 .auth-container,
 .dashboard-container {
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   border: 2px solid pink;
   border-radius: 20px;
   padding: 2em;
   max-width: 700px;
   margin: 60px auto;
+  box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
 }
 
-/* Inputs and buttons */
+/* 🌸 HEADINGS */
+h1, h2, h3 {
+  text-align: center;
+  color: #e91e63;
+  margin-bottom: 1em;
+}
+
+/* 🌸 FORM ELEMENTS */
 input, textarea, select, button {
   display: block;
   width: 100%;
@@ -68,14 +76,15 @@ input, textarea, select, button {
   font-size: 1em;
   border: 1px solid #ccc;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 button {
   background: pink;
   color: black;
   font-weight: bold;
-  border: none;
   cursor: pointer;
+  border: none;
   transition: background 0.3s;
 }
 
@@ -84,13 +93,7 @@ button:hover {
   color: white;
 }
 
-/* Headings */
-h1, h2, h3 {
-  text-align: center;
-  color: #e91e63;
-}
-
-/* Plant Image */
+/* 🌸 PLANT IMAGE */
 .plant-img {
   display: block;
   margin: 20px auto;
@@ -103,7 +106,21 @@ h1, h2, h3 {
   transform: scale(1.05);
 }
 
-/* Weather Themes */
+/* 🌸 ENTRY LIST */
+#entries-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+#entries-list li {
+  background: #fff0f5;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 5px rgba(255, 182, 193, 0.4);
+}
+
+/* 🌸 WEATHER BACKGROUND THEMES */
 .weather-sunny {
   background: linear-gradient(to bottom, #ffe9a7, #fff6d1);
 }
@@ -118,18 +135,4 @@ h1, h2, h3 {
 }
 .weather-windy {
   background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
-}
-
-/* Entry List */
-#entries-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-#entries-list li {
-  background: #fff0f5;
-  margin: 10px 0;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 5px rgba(255, 182, 193, 0.4);
 }
