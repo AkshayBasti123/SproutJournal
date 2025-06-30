@@ -1,3 +1,34 @@
+function updateStreakCounter() {
+  const today = new Date().toISOString().split('T')[0];
+  const streakKey = `plant_streak_${currentUser}`;
+  const lastVisitKey = `plant_lastVisit_${currentUser}`;
+  
+  let streak = parseInt(localStorage.getItem(streakKey)) || 0;
+  const lastVisit = localStorage.getItem(lastVisitKey);
+  
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+  if (lastVisit === today) {
+    // Already counted today, keep same streak
+  } else if (lastVisit === yesterdayStr) {
+    streak += 1; // Continued streak
+  } else {
+    streak = 1; // New streak starts
+  }
+
+  localStorage.setItem(streakKey, streak);
+  localStorage.setItem(lastVisitKey, today);
+
+  // Display the streak
+  const streakEl = document.getElementById('streak-message');
+  if (streakEl) {
+    streakEl.textContent = `You're on a ${streak}-day streak! 🌼`;
+  }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const entryForm = document.getElementById('entry-form');
   const entryLog = document.getElementById('entry-log');
