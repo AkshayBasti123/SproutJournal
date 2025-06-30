@@ -148,3 +148,13 @@ body.flower-bg::before {
   transform: scale(1.05);
 }
 
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: black;
+  color: pink;
+  overflow-y: auto; 
+}
+
