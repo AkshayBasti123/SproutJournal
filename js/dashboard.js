@@ -1,107 +1,68 @@
-const username = localStorage.getItem("currentUser");
-if (!username) window.location.href = "index.html";
+document.addEventListener('DOMContentLoaded', () => {
+  const entryForm = document.getElementById('entry-form');
+  const entryLog = document.getElementById('entry-log');
+  const weatherSelect = document.getElementById('entry-weather');
+  const plantImg = document.getElementById('plant-stage');
 
-const today = new Date().toISOString().split("T")[0];
-const userKey = `user_${username}`;
-let userData = JSON.parse(localStorage.getItem(userKey)) || {
-  entries: [],
-  loginDates: [],
-  streak: 0
-};
+  const currentUser = localStorage.getItem('currentUser');
+  const entriesKey = `entries_${currentUser}`;
 
-
-function getYesterday(dateStr) {
-  const date = new Date(dateStr);
-  date.setDate(date.getDate() - 1);
-  return date.toISOString().split("T")[0];
-}
-
-
-function updateStreak() {
-  const dates = [...new Set(userData.loginDates)].sort(); 
-  let streak = 1;
-
-  for (let i = dates.length - 2; i >= 0; i--) {
-    const expected = getYesterday(dates[i + 1]);
-    if (dates[i] === expected) {
-      streak++;
-    } else {
-      break;
-    }
-  }
-
-  const lastDate = dates[dates.length - 1];
-  const missed = lastDate !== today && getYesterday(today) !== lastDate;
-
-  userData.streak = missed ? 1 : streak;
-}
-
-
-function updatePlantVisual() {
-  const stage = Math.min(userData.streak, 7);
-  document.getElementById("plant-stage").src = `images/hibiscus${stage}.png`;
-}
-
-
-function updateStreakAndPlant() {
-  if (!userData.loginDates.includes(today)) {
-    userData.loginDates.push(today);
-  }
-
-  updateStreak();
-  updatePlantVisual();
-
-  const todayEntry = userData.entries.find(e => e.date === today);
-  if (todayEntry) {
-    document.body.classList.add(`weather-${todayEntry.weather}`);
-  }
-
-  localStorage.setItem(userKey, JSON.stringify(userData));
-}
-
-
-function renderEntries() {
-  const list = document.getElementById("entry-log");
-  list.innerHTML = "";
-  userData.entries
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .forEach(entry => {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${entry.title}</strong> (${entry.date})<br><em>${entry.category}</em> — ${entry.weather}<br>${entry.content}`;
-      list.appendChild(li);
+  // 🌸 Load past entries
+  function loadEntries() {
+    entryLog.innerHTML = '';
+    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+    entries.forEach(entry => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${entry.title}</strong> (${entry.category})<br>${entry.content}`;
+      entryLog.appendChild(li);
     });
-}
-
-
-document.getElementById("entry-form").addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const entry = {
-    title: document.getElementById("entry-title").value,
-    content: document.getElementById("entry-content").value,
-    category: document.getElementById("entry-category").value,
-    weather: document.getElementById("entry-weather").value,
-    date: today
-  };
-
-
-  userData.entries = userData.entries.filter(e => e.date !== today);
-  userData.entries.push(entry);
-
-  if (!userData.loginDates.includes(today)) {
-    userData.loginDates.push(today);
   }
 
-  updateStreakAndPlant();
-  renderEntries();
-  this.reset();
+  // 🌼 Save a new entry
+  entryForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = document.getElementById('entry-title').value.trim();
+    const content = document.getElementById('entry-content').value.trim();
+    const category = document.getElementById('entry-category').value.trim();
+    const weather = weatherSelect.value;
+
+    if (!title || !content || !category) return;
+
+    const newEntry = { title, content, category, weather };
+    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+    entries.push(newEntry);
+    localStorage.setItem(entriesKey, JSON.stringify(entries));
+
+    // 🌤️ Apply weather theme
+    document.body.classList.remove('weather-sunny', 'weather-cloudy', 'weather-rainy', 'weather-snowy', 'weather-windy');
+    document.body.classList.add(`weather-${weather}`);
+
+    // 🪴 Update plant stage
+    updatePlantStage(entries.length);
+
+    entryForm.reset();
+    loadEntries();
+  });
+
+  // 🌱 Load plant based on number of entries (7 stages)
+  function updatePlantStage(entryCount) {
+    const stage = Math.min(entryCount, 7);
+    const imgPath = `images/hibiscus${stage}.png`; // ✅ using your filenames
+    plantImg.src = imgPath;
+    plantImg.alt = `Hibiscus stage ${stage}`;
+    plantImg.classList.add('grow');
+    setTimeout(() => plantImg.classList.remove('grow'), 500);
+  }
+
+  // 🔄 Init
+  loadEntries();
+  const savedEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+
+  // Set initial weather theme based on last entry (optional)
+  if (savedEntries.length > 0) {
+    const lastWeather = savedEntries[savedEntries.length - 1].weather;
+    document.body.classList.add(`weather-${lastWeather}`);
+  }
+
+  updatePlantStage(savedEntries.length);
 });
-
-updateStreakAndPlant();
-renderEntries();
-
-const plant = document.getElementById("plant-stage");
-plant.classList.remove("grow");
-void plant.offsetWidth; 
-plant.classList.add("grow");
-
