@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard • Bloom Journal</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <title>Bloom Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-<body class="dashboard">
+<body class="flower-bg dashboard">
   <div class="dashboard-container">
-    <h2>Welcome back 🌸</h2>
+    <h2>Welcome to your garden 🌷</h2>
 
-    <img id="plant-stage" src="" alt="Your Plant" class="plant-img" />
+    <img id="plant-stage" src="" alt="Plant" class="plant-img" />
 
     <form id="entry-form">
-      <input type="text" id="entry-title" placeholder="Title" required />
-      <textarea id="entry-content" placeholder="What's on your mind?" required></textarea>
+      <input type="text" id="entry-title" placeholder="Entry Title" required />
+      <textarea id="entry-content" placeholder="Write your thoughts..." required></textarea>
       <input type="text" id="entry-category" placeholder="Category" required />
       <select id="entry-weather">
         <option value="sunny">☀️ Sunny</option>
@@ -22,11 +22,11 @@
         <option value="snowy">❄️ Snowy</option>
         <option value="windy">🌬️ Windy</option>
       </select>
-      <button type="submit">Save Entry</button>
+      <button type="submit">Add Entry</button>
     </form>
 
     <div id="entries-list">
-      <h3>Past Entries</h3>
+      <h3>🌸 Past Entries</h3>
       <ul id="entry-log"></ul>
     </div>
   </div>
