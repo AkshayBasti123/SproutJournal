@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 🪴 Only grow plant once per calendar day
   function updatePlantStageIfNewDay() {
-    updateStreakCounter();
     const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
     let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
@@ -93,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 🪴 Check plant growth only if it’s a new day
     updatePlantStageIfNewDay();
+    updateStreakCounter();
 
     entryForm.reset();
     loadEntries();
