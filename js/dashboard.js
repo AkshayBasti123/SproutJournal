@@ -39,7 +39,7 @@ function updateStreak() {
 
 function updatePlantVisual() {
   const stage = Math.min(userData.streak, 7);
-  document.getElementById("plant-stage").src = `images/growth_stage_${stage}.png`;
+  document.getElementById("plant-stage").src = `images/hibiscus${stage}.png`;
 }
 
 
