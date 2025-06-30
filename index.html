@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login • Bloom Journal</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <title>Bloom Journal • Start</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-<body class="auth-page">
+<body class="flower-bg">
   <div class="auth-container">
-    <h1>🌸 Bloom Journal || For my Wife</h1>
+    <h1>🌸 Bloom Journal</h1>
 
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
-    <input type="text" id="username" placeholder="Create a Username" />
-    
-    <button onclick="signup()">Sign Up</button>
-    <hr>
-    <input type="text" id="loginUsername" placeholder="Username" />
-    <input type="password" id="loginPassword" placeholder="Password" />
-    <button onclick="login()">Log In</button>
+    <div id="signup">
+      <h2>Sign Up</h2>
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="text" id="username" placeholder="Username" required />
+      <button onclick="signup()">Sign Up</button>
+      <p>Already have an account? <button onclick="showLogin()">Log In</button></p>
+    </div>
+
+    <div id="login" style="display:none;">
+      <h2>Log In</h2>
+      <input type="text" id="loginUsername" placeholder="Username" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button onclick="login()">Log In</button>
+      <p>Don't have an account? <button onclick="showSignup()">Sign Up</button></p>
+    </div>
   </div>
+
   <script src="js/auth.js"></script>
 </body>
 </html>
