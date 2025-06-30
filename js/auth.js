@@ -1,23 +1,47 @@
-function signup() {
-  const email = document.getElementById("email").value;
-  const pass = document.getElementById("password").value;
-  const username = document.getElementById("username").value;
+function showLogin() {
+  document.getElementById("signup").style.display = "none";
+  document.getElementById("login").style.display = "block";
+}
 
-  if (!email || !pass || !username) return alert("Please fill all fields.");
-  const userData = { email, password: pass, loginDates: [], entries: [] };
+function showSignup() {
+  document.getElementById("signup").style.display = "block";
+  document.getElementById("login").style.display = "none";
+}
+
+function signup() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value.trim();
+
+  if (!email || !password || !username) {
+    return alert("All fields are required.");
+  }
+
+  if (localStorage.getItem(`user_${username}`)) {
+    return alert("Username already exists.");
+  }
+
+  const userData = {
+    email,
+    password,
+    loginDates: [],
+    entries: []
+  };
+
   localStorage.setItem(`user_${username}`, JSON.stringify(userData));
   localStorage.setItem("currentUser", username);
   window.location.href = "dashboard.html";
 }
 
 function login() {
-  const username = document.getElementById("loginUsername").value;
-  const pass = document.getElementById("loginPassword").value;
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value;
 
   const user = JSON.parse(localStorage.getItem(`user_${username}`));
-  if (!user || user.password !== pass) {
-    return alert("Invalid login.");
+  if (!user || user.password !== password) {
+    return alert("Incorrect username or password.");
   }
+
   localStorage.setItem("currentUser", username);
   window.location.href = "dashboard.html";
 }
