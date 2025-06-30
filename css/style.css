@@ -1,10 +1,16 @@
-
-body {
+/* Reset and base styles */
+html, body {
   margin: 0;
+  padding: 0;
+  height: 100%;
   font-family: 'Segoe UI', sans-serif;
-  overflow-x: hidden;
+  background-color: black;
+  color: pink;
+  overflow-y: auto;       /* Allow vertical scroll */
+  overflow-x: hidden;     /* Prevent horizontal scroll */
 }
 
+/* Auth & Dashboard Containers */
 .auth-container,
 .dashboard-container {
   max-width: 600px;
@@ -15,8 +21,10 @@ body {
   box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
   position: relative;
   z-index: 2;
+  height: auto; /* Let content grow */
 }
 
+/* Inputs and Buttons */
 input,
 textarea,
 select,
@@ -45,6 +53,7 @@ button:hover {
   color: white;
 }
 
+/* Headings */
 h1,
 h2,
 h3 {
@@ -52,18 +61,13 @@ h3 {
   color: #e91e63;
 }
 
-body.flower-bg {
-  background: linear-gradient(135deg, #000000 0%, #1a001a 100%);
-  position: relative;
-  overflow: hidden;
-}
-
+/* 🌸 Flower Background Animation */
 body.flower-bg {
   background: black;
-  overflow: hidden;
   position: relative;
-  height: 100vh;
-  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;         /* Scroll enabled */
+  min-height: 100vh;        /* Expand if content overflows */
   font-family: 'Segoe UI', sans-serif;
 }
 
@@ -87,13 +91,18 @@ body.flower-bg::before {
     background-position: 500px 500px;
   }
 }
-}
 
 /* 🌱 Plant Image */
 .plant-img {
   display: block;
   margin: 20px auto;
   max-width: 150px;
+  height: auto;
+  transition: transform 0.4s ease;
+}
+
+.grow {
+  transform: scale(1.05);
 }
 
 /* 📒 Dashboard */
@@ -102,7 +111,7 @@ body.flower-bg::before {
   border: 2px solid pink;
 }
 
-/* Weather Themes */
+/* 🌦️ Weather Themes */
 .weather-sunny {
   background: linear-gradient(to bottom, #ffe9a7, #fff6d1);
 }
@@ -123,6 +132,7 @@ body.flower-bg::before {
   background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
 }
 
+/* 📝 Journal Entries */
 #entries-list ul {
   list-style: none;
   padding: 0;
@@ -135,26 +145,3 @@ body.flower-bg::before {
   border-radius: 12px;
   box-shadow: 0 0 5px rgba(255, 182, 193, 0.4);
 }
-
-.plant-img {
-  display: block;
-  max-width: 200px;
-  height: auto;
-  margin: 0 auto 20px auto;
-  transition: transform 0.4s ease;
-}
-
-.grow {
-  transform: scale(1.05);
-}
-
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: black;
-  color: pink;
-  overflow-y: auto; 
-}
-
