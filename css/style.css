@@ -1,79 +1,32 @@
-/* Reset and base styles */
-html, body {
+/* Reset & Base */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  height: 100%;
+}
+
+html, body {
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
   font-family: 'Segoe UI', sans-serif;
   background-color: black;
   color: pink;
-  overflow-y: auto;       /* Allow vertical scroll */
-  overflow-x: hidden;     /* Prevent horizontal scroll */
 }
 
-/* Auth & Dashboard Containers */
-.auth-container,
-.dashboard-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 2em;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
-  position: relative;
-  z-index: 2;
-  height: auto; /* Let content grow */
-}
-
-/* Inputs and Buttons */
-input,
-textarea,
-select,
-button {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 12px;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-sizing: border-box;
-}
-
-button {
-  background: pink;
-  color: black;
-  cursor: pointer;
-  border: none;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background: hotpink;
-  color: white;
-}
-
-/* Headings */
-h1,
-h2,
-h3 {
-  text-align: center;
-  color: #e91e63;
-}
-
-/* 🌸 Flower Background Animation */
+/* FLOWER BACKGROUND */
 body.flower-bg {
-  background: black;
   position: relative;
+  background: black;
+  min-height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;         /* Scroll enabled */
-  min-height: 100vh;        /* Expand if content overflows */
-  font-family: 'Segoe UI', sans-serif;
+  overflow-y: auto;
 }
 
 body.flower-bg::before {
   content: '';
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   background-image: radial-gradient(circle, rgba(255, 182, 193, 0.4) 1px, transparent 1px);
@@ -83,6 +36,7 @@ body.flower-bg::before {
   pointer-events: none;
 }
 
+/* Animate flower dots diagonally */
 @keyframes moveFlowers {
   0% {
     background-position: 0 0;
@@ -92,7 +46,51 @@ body.flower-bg::before {
   }
 }
 
-/* 🌱 Plant Image */
+/* Containers */
+.auth-container,
+.dashboard-container {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid pink;
+  border-radius: 20px;
+  padding: 2em;
+  max-width: 700px;
+  margin: 60px auto;
+}
+
+/* Inputs and buttons */
+input, textarea, select, button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+button {
+  background: pink;
+  color: black;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: hotpink;
+  color: white;
+}
+
+/* Headings */
+h1, h2, h3 {
+  text-align: center;
+  color: #e91e63;
+}
+
+/* Plant Image */
 .plant-img {
   display: block;
   margin: 20px auto;
@@ -105,34 +103,24 @@ body.flower-bg::before {
   transform: scale(1.05);
 }
 
-/* 📒 Dashboard */
-.dashboard-container {
-  background-color: rgba(255, 255, 255, 0.92);
-  border: 2px solid pink;
-}
-
-/* 🌦️ Weather Themes */
+/* Weather Themes */
 .weather-sunny {
   background: linear-gradient(to bottom, #ffe9a7, #fff6d1);
 }
-
 .weather-cloudy {
   background: linear-gradient(to bottom, #d7dbe0, #f0f0f0);
 }
-
 .weather-rainy {
   background: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
 }
-
 .weather-snowy {
   background: linear-gradient(to bottom, #e0f7fa, #ffffff);
 }
-
 .weather-windy {
   background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
 }
 
-/* 📝 Journal Entries */
+/* Entry List */
 #entries-list ul {
   list-style: none;
   padding: 0;
