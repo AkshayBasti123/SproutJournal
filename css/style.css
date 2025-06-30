@@ -1,32 +1,62 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 0;
-  transition: background 0.4s ease;
+  font-family: 'Segoe UI', sans-serif;
+  overflow-x: hidden;
 }
 
 .auth-container, .dashboard-container {
   max-width: 600px;
   margin: 50px auto;
   padding: 2em;
-  background: white;
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
+  position: relative;
+  z-index: 2;
 }
 
 input, textarea, select, button {
   display: block;
   width: 100%;
-  margin-bottom: 10px;
+  margin: 10px 0;
   padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
   font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 10px;
 }
 
-textarea {
-  resize: vertical;
-  height: 100px;
+button {
+  background: pink;
+  color: black;
+  cursor: pointer;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #e91e63;
+}
+
+
+.flower-bg::before, .flower-bg::after {
+  content: "";
+  position: fixed;
+  width: 200vw;
+  height: 200vh;
+  background-image: url('https://i.imgur.com/8zPNQvK.png');
+  background-size: contain;
+  background-repeat: repeat;
+  opacity: 0.05;
+  z-index: 0;
+  animation: floatFlowers 60s linear infinite;
+}
+
+.flower-bg::after {
+  animation-direction: reverse;
+}
+
+@keyframes floatFlowers {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-50%, -50%); }
 }
 
 .plant-img {
@@ -35,13 +65,9 @@ textarea {
   max-width: 150px;
 }
 
-#entries-list {
-  margin-top: 2em;
-}
-
-#entry-log li {
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
+/* Dashboard */
+.dashboard-container {
+  background-color: rgba(255, 255, 255, 0.92);
 }
 
 .weather-sunny { background: linear-gradient(#ffe9a7, #fff6d1); }
