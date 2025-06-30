@@ -99,3 +99,9 @@ document.getElementById("entry-form").addEventListener("submit", function (e) {
 
 updateStreakAndPlant();
 renderEntries();
+
+const plant = document.getElementById("plant-stage");
+plant.classList.remove("grow");
+void plant.offsetWidth; 
+plant.classList.add("grow");
+
