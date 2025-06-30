@@ -135,3 +135,12 @@ body.flower-bg::before {
   border-radius: 12px;
   box-shadow: 0 0 5px rgba(255, 182, 193, 0.4);
 }
+
+.plant-img {
+  display: block;
+  max-width: 200px;
+  height: auto;
+  margin: 0 auto 20px auto;
+  transition: transform 0.4s ease;
+}
+
