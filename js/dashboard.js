@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
   const entryForm = document.getElementById('entry-form');
   const entryLog = document.getElementById('entry-log');
@@ -10,21 +9,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const stageKey = `plant_stage_${currentUser}`;
   const dateKey = `plant_lastUpdate_${currentUser}`;
 
+  const today = new Date().toISOString().split('T')[0];
+
   // 🌸 Load past entries
   function loadEntries() {
     entryLog.innerHTML = '';
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-    entries.forEach(entry => {
+
+    entries.forEach((entry, index) => {
       const li = document.createElement('li');
-      li.innerHTML = `<strong>${entry.title}</strong> (${entry.category})<br>${entry.content}`;
+      li.innerHTML = `
+        <strong>${entry.title}</strong> (${entry.category})<br>
+        ${entry.content}<br>
+        <button onclick="deleteEntry(${index})">🗑 Delete</button>
+      `;
       entryLog.appendChild(li);
     });
   }
 
   // 🪴 Only grow plant once per calendar day
   function updatePlantStageIfNewDay() {
-    const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-
     let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
     const lastUpdateDate = localStorage.getItem(dateKey);
 
@@ -41,6 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => plantImg.classList.remove('grow'), 500);
   }
 
+  // 🗑 Delete a specific entry by index
+  window.deleteEntry = function (index) {
+    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+    entries.splice(index, 1);
+    localStorage.setItem(entriesKey, JSON.stringify(entries));
+    loadEntries();
+  };
+
   // 🌼 Save a new entry
   entryForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -51,23 +63,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!title || !content || !category) return;
 
-    const newEntry = { title, content, category, weather };
+    const newEntry = { title, content, category, weather, date: today };
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-    entries.push(newEntry);
+
+    // If an entry for today already exists, replace it
+    const existingIndex = entries.findIndex(e => e.date === today);
+    if (existingIndex !== -1) {
+      entries[existingIndex] = newEntry;
+    } else {
+      entries.push(newEntry);
+    }
+
     localStorage.setItem(entriesKey, JSON.stringify(entries));
 
     // 🌤️ Apply weather theme
     document.body.classList.remove('weather-sunny', 'weather-cloudy', 'weather-rainy', 'weather-snowy', 'weather-windy');
     document.body.classList.add(`weather-${weather}`);
 
-    // 🪴 Check plant growth only if it’s a new day
     updatePlantStageIfNewDay();
-
     entryForm.reset();
     loadEntries();
   });
 
-  // 🔄 Init
+  // 🔁 Init
   loadEntries();
 
   // Set weather theme to last used one
@@ -77,5 +95,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add(`weather-${lastWeather}`);
   }
 
-  updatePlantStageIfNewDay(); // Check on load
+  updatePlantStageIfNewDay(); // Check plant stage on page load
 });
