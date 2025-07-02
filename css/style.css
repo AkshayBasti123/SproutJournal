@@ -215,3 +215,10 @@ button:hover {
   border: 1px solid #ffb6c1;
 }
 
+.entry-block {
+  background-color: #fff0f5;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(255, 182, 193, 0.3);
+}
