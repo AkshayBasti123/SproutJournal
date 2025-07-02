@@ -1,101 +1,131 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const entryForm = document.getElementById('entry-form');
-  const entryLog = document.getElementById('entry-log');
-  const weatherSelect = document.getElementById('entry-weather');
-  const plantImg = document.getElementById('plant-stage');
-  const streakEl = document.getElementById('streak-message');
-
-  const currentUser = localStorage.getItem('currentUser');
-  const entriesKey = `entries_${currentUser}`;
-  const stageKey = `plant_stage_${currentUser}`;
-  const dateKey = `plant_lastUpdate_${currentUser}`;
-  const streakKey = `plant_streak_${currentUser}`;
-  const lastVisitKey = `plant_lastVisit_${currentUser}`;
-
-  function loadEntries() {
-    entryLog.innerHTML = '';
-    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-    entries.forEach(entry => {
-      const li = document.createElement('li');
-      li.innerHTML = `<strong>${entry.title}</strong> (${entry.category})<br>${entry.content}`;
-      entryLog.appendChild(li);
-    });
+document.addEventListener("DOMContentLoaded", () => {
+  const username = localStorage.getItem("currentUser");
+  if (!username) {
+    window.location.href = "index.html";
+    return;
   }
 
-  function updatePlantStageIfNewDay() {
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
-    const lastUpdateDate = localStorage.getItem(dateKey);
+  const userData = JSON.parse(localStorage.getItem(`user_${username}`));
+  const streakDisplay = document.createElement("h4");
+  document.querySelector(".dashboard-container").prepend(streakDisplay);
 
-    if (lastUpdateDate !== today && currentStage < 7) {
-      currentStage += 1;
-      localStorage.setItem(stageKey, currentStage);
-      localStorage.setItem(dateKey, today);
-    }
+  updateStreak(userData, username, streakDisplay);
+  updatePlantImage(userData.loginDates);
 
-    const imgPath = `images/hibiscus${currentStage}.png`;
-    plantImg.src = imgPath;
-    plantImg.alt = `Hibiscus stage ${currentStage}`;
-    plantImg.classList.add('grow');
-    setTimeout(() => plantImg.classList.remove('grow'), 500);
-  }
+  renderEntries(userData.entries);
 
-  function updateStreakCounter() {
-    const today = new Date().toISOString().split('T')[0];
-    let streak = parseInt(localStorage.getItem(streakKey)) || 0;
-    const lastVisit = localStorage.getItem(lastVisitKey);
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
-
-    if (lastVisit === today) {
-      // already counted
-    } else if (lastVisit === yesterdayStr) {
-      streak += 1;
-    } else {
-      streak = 1;
-    }
-
-    localStorage.setItem(streakKey, streak);
-    localStorage.setItem(lastVisitKey, today);
-
-    if (streakEl) {
-      streakEl.textContent = `You're on a ${streak}-day streak! 🌼`;
-    }
-  }
-
-  entryForm.addEventListener('submit', (e) => {
+  document.getElementById("entry-form").addEventListener("submit", function (e) {
     e.preventDefault();
-    const title = document.getElementById('entry-title').value.trim();
-    const content = document.getElementById('entry-content').value.trim();
-    const category = document.getElementById('entry-category').value.trim();
-    const weather = weatherSelect.value;
 
-    if (!title || !content || !category) return;
+    const title = document.getElementById("entry-title").value.trim();
+    const content = document.getElementById("entry-content").value.trim();
+    const category = document.getElementById("entry-category").value.trim();
+    const weather = document.getElementById("entry-weather").value;
 
-    const newEntry = { title, content, category, weather };
-    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-    entries.push(newEntry);
-    localStorage.setItem(entriesKey, JSON.stringify(entries));
+    if (!title || !content || !category || !weather) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
-    document.body.classList.remove('weather-sunny', 'weather-cloudy', 'weather-rainy', 'weather-snowy', 'weather-windy');
-    document.body.classList.add(`weather-${weather}`);
+    const today = new Date().toISOString().split("T")[0];
+    const alreadyLoggedToday = userData.loginDates.includes(today);
 
-    updatePlantStageIfNewDay();
-    updateStreakCounter();
-    loadEntries();
-    entryForm.reset();
+    const newEntry = {
+      title,
+      content,
+      category,
+      weather,
+      date: new Date().toISOString()
+    };
+
+    userData.entries.push(newEntry);
+
+    if (!alreadyLoggedToday) {
+      userData.loginDates.push(today);
+    }
+
+    localStorage.setItem(`user_${username}`, JSON.stringify(userData));
+
+    applyWeatherTheme(weather);
+    updateStreak(userData, username, streakDisplay);
+    updatePlantImage(userData.loginDates);
+    renderEntries(userData.entries);
+
+    // Clear form
+    document.getElementById("entry-form").reset();
+  });
+});
+
+function updatePlantImage(loginDates) {
+  const uniqueDays = new Set(loginDates.map(d => d)).size;
+  const cappedDay = Math.min(uniqueDays, 7);
+  const plantImage = document.getElementById("plant-stage");
+  plantImage.src = `images/hibiscus${cappedDay}.png`;
+  plantImage.alt = `Hibiscus Stage ${cappedDay}`;
+}
+
+function updateStreak(userData, username, streakDisplay) {
+  const sortedDates = [...new Set(userData.loginDates)].sort();
+  let streak = 0;
+  let prev = null;
+
+  sortedDates.forEach(dateStr => {
+    const date = new Date(dateStr);
+    if (!prev) {
+      streak = 1;
+    } else {
+      const diff = (date - prev) / (1000 * 60 * 60 * 24);
+      if (diff === 1) {
+        streak++;
+      } else if (diff > 1) {
+        streak = 1;
+      }
+    }
+    prev = new Date(dateStr);
   });
 
-  // Initialize on page load
-  loadEntries();
-  updatePlantStageIfNewDay();
-  updateStreakCounter();
+  streakDisplay.textContent = `🌟 Streak: ${streak} day${streak !== 1 ? 's' : ''}`;
+}
 
-  // Apply latest weather background if entry exists
-  const pastEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-  if (pastEntries.length > 0) {
-    const lastWeather = pastEntries[pastEntries.length - 1].weather;
-    document.body.classList.add(`weather-${lastWeather}`);
-  }
-});
+function renderEntries(entries) {
+  const list = document.getElementById("entry-log");
+  list.innerHTML = "";
+
+  entries.forEach((entry, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <h4>${entry.title}</h4>
+      <p><strong>Category:</strong> ${entry.category}</p>
+      <p><strong>Weather:</strong> ${entry.weather}</p>
+      <p>${entry.content}</p>
+      <small>${new Date(entry.date).toLocaleString()}</small>
+      <br />
+      <button class="delete-btn" onclick="deleteEntry(${index})">🗑️ Delete</button>
+    `;
+    list.appendChild(li);
+  });
+}
+
+function deleteEntry(index) {
+  if (!confirm("Are you sure you want to delete this entry?")) return;
+
+  const username = localStorage.getItem("currentUser");
+  const userData = JSON.parse(localStorage.getItem(`user_${username}`));
+
+  userData.entries.splice(index, 1);
+  localStorage.setItem(`user_${username}`, JSON.stringify(userData));
+
+  renderEntries(userData.entries);
+}
+
+function applyWeatherTheme(weather) {
+  const body = document.body;
+  body.classList.remove(
+    "weather-sunny",
+    "weather-cloudy",
+    "weather-rainy",
+    "weather-snowy",
+    "weather-windy"
+  );
+  body.classList.add(`weather-${weather}`);
+}
