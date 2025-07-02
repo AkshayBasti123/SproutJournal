@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function triggerConfetti() {
   const colors = ['#ff69b4', '#ffb6c1', '#ffd1dc', '#ffe4e1', '#ff1493'];
-  const count = 30;
+  const count = 150; // 🎉 Increase from 30 to 150
 
   for (let i = 0; i < count; i++) {
     const confetti = document.createElement('div');
