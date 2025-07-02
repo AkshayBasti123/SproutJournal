@@ -266,7 +266,7 @@ body.light-mode #entry-log li {
 }
 
 .toggle-theme-btn {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
   padding: 8px 14px;
