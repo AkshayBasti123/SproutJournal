@@ -5,6 +5,27 @@
   <title>Bloom Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
+  <script>
+  function toggleTheme() {
+    const body = document.body;
+    const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
+
+    if (newTheme === 'light') {
+      body.classList.add('light-mode');
+      localStorage.setItem('theme', 'light');
+    } else {
+      body.classList.remove('light-mode');
+      localStorage.setItem('theme', 'dark');
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.body.classList.add('light-mode');
+    }
+  });
+</script>
 <body class="flower-bg dashboard">
   <button onclick="logout()" class="logout-btn">🚪 Log Out</button>
   <div class="dashboard-container">
