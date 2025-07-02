@@ -129,3 +129,5 @@ function applyWeatherTheme(weather) {
   );
   body.classList.add(`weather-${weather}`);
 }
+
+window.deleteEntry = deleteEntry;
