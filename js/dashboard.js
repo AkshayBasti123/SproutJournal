@@ -72,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const grouped = {};
     entries.forEach((entry, index) => {
-      const dateKey = new Date(entry.date).toDateString();
+      const parsedDate = new Date(Date.parse(entry.date));
+  const dateKey = isNaN(parsedDate) ? 'Unknown Date' : parsedDate.toDateString();
       if (!grouped[dateKey]) grouped[dateKey] = [];
       grouped[dateKey].unshift({ ...entry, index });
     });
