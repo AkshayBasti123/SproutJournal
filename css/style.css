@@ -1,4 +1,4 @@
-/* 🌸 RESET & BASE STYLES */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,7 +14,7 @@ html, body {
   color: pink;
 }
 
-/* 🌸 FLOWER BACKGROUND ANIMATION */
+
 body.flower-bg {
   position: relative;
   background: black;
@@ -46,7 +46,7 @@ body.flower-bg::before {
   }
 }
 
-/* 🌸 AUTH AND DASHBOARD CONTAINERS */
+
 .auth-container,
 .dashboard-container {
   position: relative;
@@ -60,14 +60,14 @@ body.flower-bg::before {
   box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
 }
 
-/* 🌸 HEADINGS */
+
 h1, h2, h3 {
   text-align: center;
   color: #e91e63;
   margin-bottom: 1em;
 }
 
-/* 🌸 FORM ELEMENTS */
+
 input, textarea, select, button {
   display: block;
   width: 100%;
@@ -93,7 +93,7 @@ button:hover {
   color: white;
 }
 
-/* 🌸 PLANT IMAGE */
+
 .plant-img {
   display: block;
   margin: 20px auto;
@@ -136,3 +136,26 @@ button:hover {
 .weather-windy {
   background: linear-gradient(to bottom, #c9d6ff, #e2e2e2);
 }
+
+.plant-note {
+  text-align: center;
+  font-style: italic;
+  color: #e0b0ff; 
+  margin-top: -10px;
+  margin-bottom: 20px;
+  font-size: 1.05em;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+#entry-log li {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #e8e8e8;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  line-height: 1.6;
+  font-size: 0.95em;
+}
+
