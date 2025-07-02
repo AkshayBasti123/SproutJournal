@@ -97,3 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updatePlantStageIfNewDay(); // Check plant stage on page load
 });
+
+function logout() {
+  localStorage.removeItem("currentUser");
+  window.location.href = "index.html";
+}
