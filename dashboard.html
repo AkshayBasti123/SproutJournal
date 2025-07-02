@@ -6,66 +6,68 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="flower-bg dashboard">
-  <button onclick="logout()" class="logout-btn">🚪 Log Out</button>
   <div class="dashboard-container">
     <h2>Welcome to your journal garden 🌷</h2>
-    <p id="streak-message" style="text-align:center; font-weight: bold; color: hotpink;"></p>
 
+    <button onclick="logout()" class="logout-btn">🚪 Logout</button>
+    <button class="toggle-theme-btn" onclick="toggleTheme()">🌓 Toggle Theme</button>
+
+    <p id="streak-message" style="text-align:center; font-weight: bold; color: hotpink;"></p>
     <p class="plant-note">This is your flower. It grows every day you log in 🌱</p>
     <img id="plant-stage" src="" alt="Plant" class="plant-img" />
 
     <form id="entry-form">
-  <input type="text" id="entry-title" placeholder="Entry Title" required />
-  <textarea id="entry-content" placeholder="How was your day today? Anything fun? Anything boring? I'm just a journal:)" required></textarea>
-  <input type="text" id="entry-category" placeholder="Category" required />
-  
-  <select id="entry-weather">
-    <option value="sunny">☀️ Sunny</option>
-    <option value="cloudy">☁️ Cloudy</option>
-    <option value="rainy">🌧️ Rainy</option>
-    <option value="snowy">❄️ Snowy</option>
-    <option value="windy">🌬️ Windy</option>
-  </select>
-
-  <select id="entry-mood">
-  <option value="😊">😊 Happy</option>
-  <option value="😔">😔 Sad</option>
-  <option value="😡">😡 Angry</option>
-  <option value="😌">😌 Calm</option>
-  <option value="🤩">🤩 Excited</option>
-</select>
-
-  <button type="submit">Add Entry</button>
-</form>
+      <input type="text" id="entry-title" placeholder="Entry Title" required />
+      <textarea id="entry-content" placeholder="How was your day today?" required></textarea>
+      <input type="text" id="entry-category" placeholder="Category" required />
+      <select id="entry-weather">
+        <option value="sunny">☀️ Sunny</option>
+        <option value="cloudy">☁️ Cloudy</option>
+        <option value="rainy">🌧️ Rainy</option>
+        <option value="snowy">❄️ Snowy</option>
+        <option value="windy">🌬️ Windy</option>
+      </select>
+      <select id="entry-mood">
+        <option value="😊">😊 Happy</option>
+        <option value="😢">😢 Sad</option>
+        <option value="😡">😡 Angry</option>
+        <option value="😴">😴 Tired</option>
+        <option value="😎">😎 Cool</option>
+      </select>
+      <button type="submit">Add Entry</button>
+    </form>
 
     <div id="entries-list">
       <h3>🌸 Past Entries</h3>
       <ul id="entry-log"></ul>
     </div>
   </div>
-  <button class="toggle-theme-btn" onclick="toggleTheme()">🌓 Toggle Theme</button>
+
   <script src="js/dashboard.js"></script>
   <script>
-  // Toggle theme
-  function toggleTheme() {
-    const body = document.body;
-    const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
-
-    if (newTheme === 'light') {
-      body.classList.add('light-mode');
-      localStorage.setItem('theme', 'light');
-    } else {
-      body.classList.remove('light-mode');
-      localStorage.setItem('theme', 'dark');
+    function logout() {
+      localStorage.removeItem("currentUser");
+      window.location.href = "index.html";
     }
-  }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-mode');
+    function toggleTheme() {
+      const body = document.body;
+      const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
+      if (newTheme === 'light') {
+        body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+      }
     }
-  });
-</script>
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+      }
+    });
+  </script>
 </body>
 </html>
