@@ -1,5 +1,3 @@
-import { auth, database } from './firebase.js';
-import { ref, push, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 document.addEventListener('DOMContentLoaded', () => {
   const entryForm = document.getElementById('entry-form');
