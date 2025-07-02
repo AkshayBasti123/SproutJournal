@@ -282,13 +282,14 @@ body.light-mode #entry-log li {
 
 .confetti-piece {
   position: fixed;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background-color: hotpink;
   z-index: 10000;
   animation: fall 1.5s linear forwards;
-  opacity: 0.8;
+  opacity: 0.85;
   border-radius: 2px;
+  pointer-events: none;
 }
 
 @keyframes fall {
@@ -301,4 +302,3 @@ body.light-mode #entry-log li {
     opacity: 0;
   }
 }
-
