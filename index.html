@@ -7,7 +7,6 @@
 </head>
 <body class="flower-bg">
   <div class="auth-container">
-    <button class="toggle-theme-btn" onclick="toggleTheme()">🌓 Toggle Theme</button>
     <h1>🌸 Bloom Journal</h1>
 
     <div id="signup">
@@ -24,29 +23,30 @@
       <button onclick="login()">Log In</button>
       <p>Don't have an account? <button onclick="showSignup()">Sign Up</button></p>
     </div>
+
+    <button class="toggle-theme-btn" onclick="toggleTheme()">🌓 Toggle Theme</button>
   </div>
+
   <script src="js/auth.js" defer></script>
   <script>
-  function toggleTheme() {
-    const body = document.body;
-    const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
-
-    if (newTheme === 'light') {
-      body.classList.add('light-mode');
-      localStorage.setItem('theme', 'light');
-    } else {
-      body.classList.remove('light-mode');
-      localStorage.setItem('theme', 'dark');
+    function toggleTheme() {
+      const body = document.body;
+      const newTheme = body.classList.contains('light-mode') ? 'dark' : 'light';
+      if (newTheme === 'light') {
+        body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+      }
     }
-  }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-mode');
-    }
-  });
-</script>
-
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+      }
+    });
+  </script>
 </body>
 </html>
