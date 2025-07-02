@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateKey = `plant_lastUpdate_${currentUser}`;
   const today = new Date().toISOString().split('T')[0];
 
-  // 🌱 Grow plant once per day
+  // 🌱 Update Plant Growth
   function updatePlantStageIfNewDay() {
     let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
     const lastUpdate = localStorage.getItem(dateKey);
@@ -40,20 +40,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!title || !content || !category || !weather || !mood) return;
 
-    const newEntry = { title, content, category, weather, mood, date: today };
+    const newEntry = {
+      title,
+      content,
+      category,
+      weather,
+      mood,
+      date: new Date().toISOString()
+    };
+
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-    entries.push(newEntry);
+    entries.push(newEntry); // ✅ DON'T REPLACE — JUST ADD
 
     localStorage.setItem(entriesKey, JSON.stringify(entries));
 
-    // 🎨 Theme
     document.body.className = `flower-bg dashboard weather-${weather}`;
     updatePlantStageIfNewDay();
-    loadEntries();
     entryForm.reset();
+    loadEntries();
   });
 
-  // 🗑️ Delete entry with confirmation
+  // 🗑️ Delete
   window.deleteEntry = function (index) {
     if (!confirm("Are you sure you want to delete this entry?")) return;
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
@@ -62,22 +69,26 @@ document.addEventListener('DOMContentLoaded', () => {
     loadEntries();
   };
 
-  // 📜 Timeline View
+  // 📜 Load Timeline Entries
   function loadEntries() {
     entryLog.innerHTML = '';
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
 
+    // Group by date (day precision)
     const grouped = {};
-    entries.forEach((entry, i) => {
+    entries.forEach((entry, index) => {
       const dateKey = new Date(entry.date).toDateString();
       if (!grouped[dateKey]) grouped[dateKey] = [];
-      grouped[dateKey].push({ ...entry, index: i });
+      grouped[dateKey].push({ ...entry, index });
     });
 
+    // Sort date groups (newest first)
     const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
+
     sortedDates.forEach(date => {
-      const dateGroup = document.createElement('li');
-      dateGroup.innerHTML = `<h3>📅 ${date}</h3>`;
+      const groupContainer = document.createElement('li');
+      groupContainer.innerHTML = `<h3>📅 ${date}</h3>`;
+
       grouped[date].forEach(entry => {
         const block = document.createElement('div');
         block.classList.add('entry-block');
@@ -85,15 +96,17 @@ document.addEventListener('DOMContentLoaded', () => {
           <strong>📌 ${entry.title}</strong> (${entry.category})<br>
           ${entry.content}<br>
           Mood: ${entry.mood} | Weather: ${entry.weather}<br>
+          <small>${new Date(entry.date).toLocaleTimeString()}</small><br>
           <button class="delete-btn" onclick="deleteEntry(${entry.index})">🗑 Delete</button>
         `;
-        dateGroup.appendChild(block);
+        groupContainer.appendChild(block);
       });
-      entryLog.appendChild(dateGroup);
+
+      entryLog.appendChild(groupContainer);
     });
   }
 
-  // Init
+  // Init on page load
   const savedEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
   if (savedEntries.length > 0) {
     const lastWeather = savedEntries[savedEntries.length - 1].weather;
