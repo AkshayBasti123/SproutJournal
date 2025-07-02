@@ -9,22 +9,21 @@
   <div class="auth-container">
     <h1>🌸 Bloom Journal</h1>
 
-    <div id="signup">
-      <h2>Sign Up</h2>
-      <input type="email" id="email" placeholder="Email">
-      <input type="password" id="password" placeholder="Password">
-      <input type="text" id="username" placeholder="Username">
-      <button onclick="signup()">Sign Up</button>
-      <p>Already have an account? <button onclick="showLogin()">Log In</button></p>
-    </div>
+   <div id="signup">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <input type="text" id="username" placeholder="Username">
+  <button onclick="signup()">Sign Up</button>
+  <p>Already have an account? <button onclick="showLogin()">Log In</button></p>
+</div>
 
-    <div id="login" style="display:none;">
-      <h2>Log In</h2>
-      <input type="text" id="loginUsername" placeholder="Username">
-      <input type="password" id="loginPassword" placeholder="Password">
-      <button onclick="login()">Log In</button>
-      <p>Don't have an account? <button onclick="showSignup()">Sign Up</button></p>
-    </div>
+    
+<div id="login" style="display: none;">
+  <input type="text" id="loginUsername" placeholder="Username">
+  <input type="password" id="loginPassword" placeholder="Password">
+  <button onclick="login()">Log In</button>
+  <p>Don't have an account? <button onclick="showSignup()">Sign Up</button></p>
+</div>
   </div>
 
   <script src="js/auth.js"></script>
