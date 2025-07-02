@@ -264,3 +264,22 @@ body.light-mode #entry-log li {
   background-color: rgba(255, 228, 235, 0.9);
   color: #3a003a;
 }
+
+.toggle-theme-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  background-color: #ffb6c1;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 0 8px rgba(255, 182, 193, 0.6);
+}
+
+.toggle-theme-btn:hover {
+  background-color: #e91e63;
+  color: white;
+}
