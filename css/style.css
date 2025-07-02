@@ -222,3 +222,45 @@ button:hover {
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(255, 182, 193, 0.3);
 }
+
+/* 🌗 Toggle Button */
+.toggle-theme-btn {
+  background: #f8a7c5;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin-top: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.toggle-theme-btn:hover {
+  background: #e91e63;
+}
+
+body.light-mode {
+  background-color: white;
+  color: #3a003a;
+}
+
+body.light-mode.flower-bg::before {
+  background-image: radial-gradient(circle, rgba(255, 182, 193, 0.5) 1px, transparent 1px);
+}
+
+body.light-mode .auth-container,
+body.light-mode .dashboard-container {
+  background: rgba(255, 255, 255, 0.95);
+  color: #3a003a;
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3 {
+  color: #e91e63;
+}
+
+body.light-mode #entry-log li {
+  background-color: rgba(255, 228, 235, 0.9);
+  color: #3a003a;
+}
