@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const content = document.getElementById('entry-content').value.trim();
     const category = document.getElementById('entry-category').value.trim();
     const weather = weatherSelect.value;
-    const mood = moodSelect.value; // NEW
+    const mood = moodMap[moodSelect.value];
 
     if (!title || !content || !category) return;
 
