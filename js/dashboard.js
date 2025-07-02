@@ -133,5 +133,20 @@ function triggerConfetti() {
     document.body.appendChild(confetti);
 
     setTimeout(() => confetti.remove(), 2000);
+    console.log("confetti!"); // debug line
+    const colors = ['#ff69b4', '#ffb6c1', '#ffd1dc', '#ffe4e1', '#ff1493'];
+    const count = 30;
+
+  for (let i = 0; i < count; i++) {
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti-piece');
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.top = '-10px';
+    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confetti.style.animationDuration = (1 + Math.random()).toFixed(2) + 's';
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 2000);
+
   }
 }
