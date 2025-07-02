@@ -182,21 +182,22 @@ button:hover {
 .logout-btn {
   position: fixed;
   top: 20px;
-  right: 30px;
+  right: 20px;
   background-color: #ffb6c1;
   color: white;
-  padding: 10px 16px;
+  padding: 10px 14px;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-size: 0.95em;
   font-weight: bold;
   z-index: 999;
   cursor: pointer;
   box-shadow: 0 0 8px rgba(255, 182, 193, 0.5);
   transition: background 0.3s ease;
+  width: auto;
+  max-width: 200px;
 }
 
 .logout-btn:hover {
   background-color: #ff4d6d;
 }
-
