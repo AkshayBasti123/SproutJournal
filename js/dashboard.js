@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     entries.forEach((entry, index) => {
       const dateKey = new Date(entry.date).toDateString();
       if (!grouped[dateKey]) grouped[dateKey] = [];
-      grouped[dateKey].push({ ...entry, index });
+      grouped[dateKey].unshift({ ...entry, index });
     });
 
     const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
