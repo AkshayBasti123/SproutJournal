@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateKey = `plant_lastUpdate_${currentUser}`;
   const today = new Date().toISOString().split('T')[0];
 
-  // 🌱 Update Plant Growth
   function updatePlantStageIfNewDay() {
     let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
     const lastUpdate = localStorage.getItem(dateKey);
@@ -29,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => plantImg.classList.remove('grow'), 500);
   }
 
-  // 🧠 Save entry
   entryForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const title = document.getElementById('entry-title').value.trim();
@@ -50,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-    entries.push(newEntry); // ✅ DON'T REPLACE — JUST ADD
-
+    entries.push(newEntry);
     localStorage.setItem(entriesKey, JSON.stringify(entries));
 
     document.body.className = `flower-bg dashboard weather-${weather}`;
@@ -61,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadEntries();
   });
 
-  // 🗑️ Delete
   window.deleteEntry = function (index) {
     if (!confirm("Are you sure you want to delete this entry?")) return;
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
@@ -70,12 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadEntries();
   };
 
-  // 📜 Load Timeline Entries
   function loadEntries() {
     entryLog.innerHTML = '';
     const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
 
-    // Group by date (day precision)
     const grouped = {};
     entries.forEach((entry, index) => {
       const dateKey = new Date(entry.date).toDateString();
@@ -83,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
       grouped[dateKey].push({ ...entry, index });
     });
 
-    // Sort date groups (newest first)
     const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
 
     sortedDates.forEach(date => {
@@ -107,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Init on page load
   const savedEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
   if (savedEntries.length > 0) {
     const lastWeather = savedEntries[savedEntries.length - 1].weather;
@@ -124,29 +116,17 @@ function triggerConfetti() {
 
   for (let i = 0; i < count; i++) {
     const confetti = document.createElement('div');
-    confetti.classList.add('confetti-piece');
+    confetti.className = 'confetti-piece';
     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
     confetti.style.left = Math.random() * 100 + 'vw';
     confetti.style.top = '-10px';
-    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-    confetti.style.animationDuration = (1 + Math.random()).toFixed(2) + 's';
-    document.body.appendChild(confetti);
-
-    setTimeout(() => confetti.remove(), 2000);
-    console.log("confetti!"); // debug line
-    const colors = ['#ff69b4', '#ffb6c1', '#ffd1dc', '#ffe4e1', '#ff1493'];
-    const count = 30;
-
-  for (let i = 0; i < count; i++) {
-    const confetti = document.createElement('div');
-    confetti.classList.add('confetti-piece');
-    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    confetti.style.left = Math.random() * 100 + 'vw';
-    confetti.style.top = '-10px';
-    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-    confetti.style.animationDuration = (1 + Math.random()).toFixed(2) + 's';
+    confetti.style.width = '10px';
+    confetti.style.height = '10px';
+    confetti.style.position = 'fixed';
+    confetti.style.zIndex = 999;
+    confetti.style.borderRadius = '50%';
+    confetti.style.animation = `fall ${1 + Math.random()}s ease-out forwards`;
     document.body.appendChild(confetti);
     setTimeout(() => confetti.remove(), 2000);
-
   }
 }
