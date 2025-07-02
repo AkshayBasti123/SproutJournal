@@ -282,23 +282,18 @@ body.light-mode #entry-log li {
 
 .confetti-piece {
   position: fixed;
+  top: 0;
   width: 8px;
   height: 8px;
-  background-color: hotpink;
-  z-index: 10000;
-  animation: fall 1.5s linear forwards;
-  opacity: 0.85;
-  border-radius: 2px;
+  border-radius: 50%;
   pointer-events: none;
+  z-index: 999;
+  animation: fall 2s linear forwards;
 }
 
 @keyframes fall {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(720deg);
+  to {
+    transform: translateY(100vh) rotate(360deg);
     opacity: 0;
   }
 }
