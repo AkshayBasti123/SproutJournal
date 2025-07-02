@@ -1,3 +1,13 @@
+const moodMap = {
+  happy: "😊 Happy",
+  sad: "😢 Sad",
+  excited: "🤩 Excited",
+  anxious: "😰 Anxious",
+  frustrated: "😤 Frustrated",
+  angry: "😡 Angry",
+  calm: "😌 Calm"
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const entryForm = document.getElementById('entry-form');
   const entryLog = document.getElementById('entry-log');
