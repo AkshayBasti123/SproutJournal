@@ -178,3 +178,25 @@ button:hover {
 .delete-btn:hover {
   background-color: #ff4d6d;
 }
+
+.logout-btn {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  background-color: #ffb6c1;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: bold;
+  z-index: 999;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(255, 182, 193, 0.5);
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff4d6d;
+}
+
