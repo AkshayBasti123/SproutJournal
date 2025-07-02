@@ -120,7 +120,7 @@ button:hover {
   line-height: 1.5;
 }
 
-/* Weather themes */
+
 .weather-sunny {
   background: linear-gradient(to bottom, #ffe9a7, #fff6d1);
 }
@@ -231,28 +231,29 @@ button:hover {
   border: 1px solid #ffb6c1;
 }
 
-/* Toggle theme button */
 .toggle-theme-btn {
   position: fixed;
-  top: 70px; /* Under the logout button */
+  top: 70px;
   right: 20px;
-  padding: 10px 16px;
   background-color: #ffb6c1;
+  color: white;
+  padding: 8px 14px;
   border: none;
-  border-radius: 20px;
+  border-radius: 50px;
   font-weight: bold;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 998;
   box-shadow: 0 0 8px rgba(255, 182, 193, 0.6);
-  color: white;
-  transition: background-color 0.3s;
+  width: auto;
+  max-width: 200px;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .toggle-theme-btn:hover {
   background-color: #e91e63;
 }
 
-/* Light mode overrides */
 body.light-mode {
   background-color: white;
   color: #3a003a;
