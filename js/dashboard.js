@@ -1,133 +1,99 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const username = localStorage.getItem("currentUser");
-  if (!username) {
-    window.location.href = "index.html";
-    return;
+document.addEventListener('DOMContentLoaded', () => {
+  const entryForm = document.getElementById('entry-form');
+  const entryLog = document.getElementById('entry-log');
+  const weatherSelect = document.getElementById('entry-weather');
+  const plantImg = document.getElementById('plant-stage');
+
+  const currentUser = localStorage.getItem('currentUser');
+  const entriesKey = `entries_${currentUser}`;
+  const stageKey = `plant_stage_${currentUser}`;
+  const dateKey = `plant_lastUpdate_${currentUser}`;
+
+  const today = new Date().toISOString().split('T')[0];
+
+  // 🌸 Load past entries
+  function loadEntries() {
+    entryLog.innerHTML = '';
+    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+
+    entries.forEach((entry, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <strong>${entry.title}</strong> (${entry.category})<br>
+        ${entry.content}<br>
+        <button onclick="deleteEntry(${index})">🗑 Delete</button>
+      `;
+      entryLog.appendChild(li);
+    });
   }
 
-  const userData = JSON.parse(localStorage.getItem(`user_${username}`));
-  const streakDisplay = document.createElement("h4");
-  document.querySelector(".dashboard-container").prepend(streakDisplay);
+  // 🪴 Only grow plant once per calendar day
+  function updatePlantStageIfNewDay() {
+    let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
+    const lastUpdateDate = localStorage.getItem(dateKey);
 
-  updateStreak(userData, username, streakDisplay);
-  updatePlantImage(userData.loginDates);
+    if (lastUpdateDate !== today && currentStage < 7) {
+      currentStage += 1;
+      localStorage.setItem(stageKey, currentStage);
+      localStorage.setItem(dateKey, today);
+    }
 
-  renderEntries(userData.entries);
+    const imgPath = `images/hibiscus${currentStage}.png`;
+    plantImg.src = imgPath;
+    plantImg.alt = `Hibiscus stage ${currentStage}`;
+    plantImg.classList.add('grow');
+    setTimeout(() => plantImg.classList.remove('grow'), 500);
+  }
 
-  document.getElementById("entry-form").addEventListener("submit", function (e) {
+  // 🗑 Delete a specific entry by index
+  window.deleteEntry = function (index) {
+    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+    entries.splice(index, 1);
+    localStorage.setItem(entriesKey, JSON.stringify(entries));
+    loadEntries();
+  };
+
+  // 🌼 Save a new entry
+  entryForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const title = document.getElementById('entry-title').value.trim();
+    const content = document.getElementById('entry-content').value.trim();
+    const category = document.getElementById('entry-category').value.trim();
+    const weather = weatherSelect.value;
 
-    const title = document.getElementById("entry-title").value.trim();
-    const content = document.getElementById("entry-content").value.trim();
-    const category = document.getElementById("entry-category").value.trim();
-    const weather = document.getElementById("entry-weather").value;
+    if (!title || !content || !category) return;
 
-    if (!title || !content || !category || !weather) {
-      alert("Please fill in all fields.");
-      return;
-    }
+    const newEntry = { title, content, category, weather, date: today };
+    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
 
-    const today = new Date().toISOString().split("T")[0];
-    const alreadyLoggedToday = userData.loginDates.includes(today);
-
-    const newEntry = {
-      title,
-      content,
-      category,
-      weather,
-      date: new Date().toISOString()
-    };
-
-    userData.entries.push(newEntry);
-
-    if (!alreadyLoggedToday) {
-      userData.loginDates.push(today);
-    }
-
-    localStorage.setItem(`user_${username}`, JSON.stringify(userData));
-
-    applyWeatherTheme(weather);
-    updateStreak(userData, username, streakDisplay);
-    updatePlantImage(userData.loginDates);
-    renderEntries(userData.entries);
-
-    // Clear form
-    document.getElementById("entry-form").reset();
-  });
-});
-
-function updatePlantImage(loginDates) {
-  const uniqueDays = new Set(loginDates.map(d => d)).size;
-  const cappedDay = Math.min(uniqueDays, 7);
-  const plantImage = document.getElementById("plant-stage");
-  plantImage.src = `images/hibiscus${cappedDay}.png`;
-  plantImage.alt = `Hibiscus Stage ${cappedDay}`;
-}
-
-function updateStreak(userData, username, streakDisplay) {
-  const sortedDates = [...new Set(userData.loginDates)].sort();
-  let streak = 0;
-  let prev = null;
-
-  sortedDates.forEach(dateStr => {
-    const date = new Date(dateStr);
-    if (!prev) {
-      streak = 1;
+    // If an entry for today already exists, replace it
+    const existingIndex = entries.findIndex(e => e.date === today);
+    if (existingIndex !== -1) {
+      entries[existingIndex] = newEntry;
     } else {
-      const diff = (date - prev) / (1000 * 60 * 60 * 24);
-      if (diff === 1) {
-        streak++;
-      } else if (diff > 1) {
-        streak = 1;
-      }
+      entries.push(newEntry);
     }
-    prev = new Date(dateStr);
+
+    localStorage.setItem(entriesKey, JSON.stringify(entries));
+
+    // 🌤️ Apply weather theme
+    document.body.classList.remove('weather-sunny', 'weather-cloudy', 'weather-rainy', 'weather-snowy', 'weather-windy');
+    document.body.classList.add(`weather-${weather}`);
+
+    updatePlantStageIfNewDay();
+    entryForm.reset();
+    loadEntries();
   });
 
-  streakDisplay.textContent = `🌟 Streak: ${streak} day${streak !== 1 ? 's' : ''}`;
-}
+  // 🔁 Init
+  loadEntries();
 
-function renderEntries(entries) {
-  const list = document.getElementById("entry-log");
-  list.innerHTML = "";
+  // Set weather theme to last used one
+  const savedEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+  if (savedEntries.length > 0) {
+    const lastWeather = savedEntries[savedEntries.length - 1].weather;
+    document.body.classList.add(`weather-${lastWeather}`);
+  }
 
-  entries.forEach((entry, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <h4>${entry.title}</h4>
-      <p><strong>Category:</strong> ${entry.category}</p>
-      <p><strong>Weather:</strong> ${entry.weather}</p>
-      <p>${entry.content}</p>
-      <small>${new Date(entry.date).toLocaleString()}</small>
-      <br />
-      <button class="delete-btn" onclick="deleteEntry(${index})">🗑️ Delete</button>
-    `;
-    list.appendChild(li);
-  });
-}
-
-function deleteEntry(index) {
-  if (!confirm("Are you sure you want to delete this entry?")) return;
-
-  const username = localStorage.getItem("currentUser");
-  const userData = JSON.parse(localStorage.getItem(`user_${username}`));
-
-  userData.entries.splice(index, 1);
-  localStorage.setItem(`user_${username}`, JSON.stringify(userData));
-
-  renderEntries(userData.entries);
-}
-
-function applyWeatherTheme(weather) {
-  const body = document.body;
-  body.classList.remove(
-    "weather-sunny",
-    "weather-cloudy",
-    "weather-rainy",
-    "weather-snowy",
-    "weather-windy"
-  );
-  body.classList.add(`weather-${weather}`);
-}
-
-window.deleteEntry = deleteEntry;
+  updatePlantStageIfNewDay(); // Check plant stage on page load
+});
