@@ -1,99 +1,104 @@
+import { auth, database } from './firebase.js';
+import { ref, push, onValue, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 document.addEventListener('DOMContentLoaded', () => {
   const entryForm = document.getElementById('entry-form');
   const entryLog = document.getElementById('entry-log');
   const weatherSelect = document.getElementById('entry-weather');
   const plantImg = document.getElementById('plant-stage');
+  const streakEl = document.getElementById('streak-message');
 
-  const currentUser = localStorage.getItem('currentUser');
-  const entriesKey = `entries_${currentUser}`;
-  const stageKey = `plant_stage_${currentUser}`;
-  const dateKey = `plant_lastUpdate_${currentUser}`;
+  auth.onAuthStateChanged(user => {
+    if (!user) return window.location.href = 'index.html';
 
-  const today = new Date().toISOString().split('T')[0];
+    const uid = user.uid;
+    const userRef = ref(database, 'users/' + uid);
 
-  // 🌸 Load past entries
-  function loadEntries() {
-    entryLog.innerHTML = '';
-    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-
-    entries.forEach((entry, index) => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <strong>${entry.title}</strong> (${entry.category})<br>
-        ${entry.content}<br>
-        <button onclick="deleteEntry(${index})">🗑 Delete</button>
-      `;
-      entryLog.appendChild(li);
-    });
-  }
-
-  // 🪴 Only grow plant once per calendar day
-  function updatePlantStageIfNewDay() {
-    let currentStage = parseInt(localStorage.getItem(stageKey)) || 1;
-    const lastUpdateDate = localStorage.getItem(dateKey);
-
-    if (lastUpdateDate !== today && currentStage < 7) {
-      currentStage += 1;
-      localStorage.setItem(stageKey, currentStage);
-      localStorage.setItem(dateKey, today);
-    }
-
-    const imgPath = `images/hibiscus${currentStage}.png`;
-    plantImg.src = imgPath;
-    plantImg.alt = `Hibiscus stage ${currentStage}`;
-    plantImg.classList.add('grow');
-    setTimeout(() => plantImg.classList.remove('grow'), 500);
-  }
-
-  // 🗑 Delete a specific entry by index
-  window.deleteEntry = function (index) {
-    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-    entries.splice(index, 1);
-    localStorage.setItem(entriesKey, JSON.stringify(entries));
     loadEntries();
-  };
-
-  // 🌼 Save a new entry
-  entryForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const title = document.getElementById('entry-title').value.trim();
-    const content = document.getElementById('entry-content').value.trim();
-    const category = document.getElementById('entry-category').value.trim();
-    const weather = weatherSelect.value;
-
-    if (!title || !content || !category) return;
-
-    const newEntry = { title, content, category, weather, date: today };
-    const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-
-    // If an entry for today already exists, replace it
-    const existingIndex = entries.findIndex(e => e.date === today);
-    if (existingIndex !== -1) {
-      entries[existingIndex] = newEntry;
-    } else {
-      entries.push(newEntry);
-    }
-
-    localStorage.setItem(entriesKey, JSON.stringify(entries));
-
-    // 🌤️ Apply weather theme
-    document.body.classList.remove('weather-sunny', 'weather-cloudy', 'weather-rainy', 'weather-snowy', 'weather-windy');
-    document.body.classList.add(`weather-${weather}`);
-
     updatePlantStageIfNewDay();
-    entryForm.reset();
-    loadEntries();
+    updateStreakCounter();
+
+    entryForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('entry-title').value;
+      const content = document.getElementById('entry-content').value;
+      const category = document.getElementById('entry-category').value;
+      const weather = weatherSelect.value;
+
+      const newEntry = {
+        title,
+        content,
+        category,
+        weather,
+        timestamp: Date.now()
+      };
+
+      push(ref(database, `users/${uid}/entries`), newEntry).then(() => {
+        entryForm.reset();
+        loadEntries();
+        applyWeatherTheme(weather);
+        updatePlantStageIfNewDay();
+        updateStreakCounter();
+      });
+    });
+
+    function loadEntries() {
+      onValue(ref(database, `users/${uid}/entries`), snapshot => {
+        entryLog.innerHTML = '';
+        const entries = snapshot.val();
+        if (entries) {
+          Object.values(entries).forEach(entry => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${entry.title}</strong> (${entry.category})<br>${entry.content}`;
+            entryLog.appendChild(li);
+          });
+        }
+      });
+    }
+
+    function applyWeatherTheme(weather) {
+      document.body.classList.remove('weather-sunny', 'weather-cloudy', 'weather-rainy', 'weather-snowy', 'weather-windy');
+      document.body.classList.add(`weather-${weather}`);
+    }
+
+    function updatePlantStageIfNewDay() {
+      const today = new Date().toISOString().split('T')[0];
+      const stageRef = ref(database, `users/${uid}/plant`);
+      get(stageRef).then(snapshot => {
+        let data = snapshot.val() || { stage: 1, lastUpdate: '' };
+        if (data.lastUpdate !== today && data.stage < 7) {
+          data.stage += 1;
+          data.lastUpdate = today;
+          set(stageRef, data);
+        }
+        plantImg.src = `images/hibiscus${data.stage}.png`;
+        plantImg.alt = `Hibiscus stage ${data.stage}`;
+      });
+    }
+
+    function updateStreakCounter() {
+      const today = new Date().toISOString().split('T')[0];
+      const streakRef = ref(database, `users/${uid}/streak`);
+      get(streakRef).then(snapshot => {
+        let data = snapshot.val() || { count: 0, lastVisit: '' };
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        if (data.lastVisit === today) {
+          // do nothing
+        } else if (data.lastVisit === yesterdayStr) {
+          data.count += 1;
+        } else {
+          data.count = 1;
+        }
+
+        data.lastVisit = today;
+        set(streakRef, data);
+        if (streakEl) {
+          streakEl.textContent = `You're on a ${data.count}-day streak! 🌼`;
+        }
+      });
+    }
   });
-
-  // 🔁 Init
-  loadEntries();
-
-  // Set weather theme to last used one
-  const savedEntries = JSON.parse(localStorage.getItem(entriesKey)) || [];
-  if (savedEntries.length > 0) {
-    const lastWeather = savedEntries[savedEntries.length - 1].weather;
-    document.body.classList.add(`weather-${lastWeather}`);
-  }
-
-  updatePlantStageIfNewDay(); // Check plant stage on page load
 });
