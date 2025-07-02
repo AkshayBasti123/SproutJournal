@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Bloom Journal • Start</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <title>Bloom Journal - Sign Up / Login</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="flower-bg">
   <div class="auth-container">
@@ -11,22 +11,22 @@
 
     <div id="signup">
       <h2>Sign Up</h2>
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <input type="text" id="username" placeholder="Username">
       <button onclick="signup()">Sign Up</button>
       <p>Already have an account? <button onclick="showLogin()">Log In</button></p>
     </div>
 
     <div id="login" style="display:none;">
       <h2>Log In</h2>
-      <input type="text" id="loginUsername" placeholder="Username" required />
-      <input type="password" id="loginPassword" placeholder="Password" required />
+      <input type="text" id="loginUsername" placeholder="Username">
+      <input type="password" id="loginPassword" placeholder="Password">
       <button onclick="login()">Log In</button>
       <p>Don't have an account? <button onclick="showSignup()">Sign Up</button></p>
     </div>
   </div>
 
-  <script type="module" src="js/auth.js"></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>
