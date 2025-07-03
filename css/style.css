@@ -315,3 +315,61 @@ body.light-mode #entry-log li {
   font-size: 1.1em;
   color: #e91e63;
 }
+
+.left-sidebar,
+.right-sidebar {
+  position: fixed;
+  top: 100px;
+  width: 200px;
+  color: #ffb6c1;
+  font-size: 0.95em;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(255, 182, 193, 0.3);
+}
+
+.left-sidebar {
+  left: 20px;
+}
+
+.right-sidebar {
+  right: 20px;
+  text-align: right;
+}
+
+.left-sidebar h4,
+.right-sidebar h4 {
+  margin-bottom: 5px;
+  color: #e91e63;
+  font-size: 1.05em;
+}
+
+.floating-icon {
+  position: fixed;
+  font-size: 1.6em;
+  z-index: 20;
+  top: 10%;
+  opacity: 0.8;
+  pointer-events: none;
+  animation: flyAcross 12s infinite linear;
+}
+
+.floating-icon.bee {
+  left: -30px;
+  animation-delay: 3s;
+}
+
+.floating-icon.butterfly {
+  left: -50px;
+  animation-delay: 6s;
+}
+
+@keyframes flyAcross {
+  0% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(30vw) translateY(5vh); }
+  50% { transform: translateX(60vw) translateY(-3vh); }
+  75% { transform: translateX(90vw) translateY(4vh); }
+  100% { transform: translateX(110vw) translateY(0); }
+}
