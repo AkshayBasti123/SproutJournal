@@ -1,22 +1,24 @@
-function showLogin() {
+// Show Login Form
+window.showLogin = function () {
   document.getElementById("signup").style.display = "none";
   document.getElementById("login").style.display = "block";
   document.getElementById("reset").style.display = "none";
-}
+};
 
-function showSignup() {
+window.showSignup = function () {
   document.getElementById("signup").style.display = "block";
   document.getElementById("login").style.display = "none";
   document.getElementById("reset").style.display = "none";
-}
+};
 
-function showReset() {
+window.showReset = function () {
   document.getElementById("signup").style.display = "none";
   document.getElementById("login").style.display = "none";
   document.getElementById("reset").style.display = "block";
-}
+};
 
-function signup() {
+// Signup Logic
+window.signup = function () {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const username = document.getElementById("username").value.trim().toLowerCase();
@@ -41,9 +43,10 @@ function signup() {
   localStorage.setItem(`user_${username}`, JSON.stringify(userData));
   localStorage.setItem("currentUser", username);
   window.location.href = "dashboard.html";
-}
+};
 
-function login() {
+// Login Logic
+window.login = function () {
   const username = document.getElementById("loginUsername").value.trim().toLowerCase();
   const password = document.getElementById("loginPassword").value;
 
@@ -55,9 +58,9 @@ function login() {
 
   localStorage.setItem("currentUser", username);
   window.location.href = "dashboard.html";
-}
+};
 
-function resetPassword() {
+window.resetPassword = function () {
   const username = document.getElementById("resetUsername").value.trim().toLowerCase();
   const email = document.getElementById("resetEmail").value.trim();
   const newPassword = document.getElementById("newPassword").value;
@@ -73,5 +76,5 @@ function resetPassword() {
   user.password = newPassword;
   localStorage.setItem(userKey, JSON.stringify(user));
   alert("Password reset successful! You can now log in.");
-  showLogin();
-}
+  window.showLogin();
+};
