@@ -78,3 +78,14 @@ window.resetPassword = function () {
   alert("Password reset successful! You can now log in.");
   window.showLogin();
 };
+
+window.togglePassword = function (fieldId, icon) {
+  const input = document.getElementById(fieldId);
+  if (input.type === "password") {
+    input.type = "text";
+    icon.textContent = "🙈";
+  } else {
+    input.type = "password";
+    icon.textContent = "👁️";
+  }
+};
