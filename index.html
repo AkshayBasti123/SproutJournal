@@ -9,6 +9,7 @@
   <div class="auth-container">
     <h1>🌸 Bloom Journal</h1>
 
+    <!-- Sign Up -->
     <div id="signup">
       <input type="email" id="email" placeholder="Email">
       <input type="password" id="password" placeholder="Password">
@@ -17,11 +18,23 @@
       <p>Already have an account? <button onclick="showLogin()">Log In</button></p>
     </div>
 
+    <!-- Log In -->
     <div id="login" style="display: none;">
       <input type="text" id="loginUsername" placeholder="Username">
       <input type="password" id="loginPassword" placeholder="Password">
       <button onclick="login()">Log In</button>
       <p>Don't have an account? <button onclick="showSignup()">Sign Up</button></p>
+      <p><button onclick="showReset()" style="font-size: 0.9em; background: none; border: none; color: hotpink; cursor: pointer;">Forgot Password?</button></p>
+    </div>
+
+    <!-- Password Reset -->
+    <div id="reset" style="display: none;">
+      <h2>Reset Password</h2>
+      <input type="text" id="resetUsername" placeholder="Username" />
+      <input type="email" id="resetEmail" placeholder="Registered Email" />
+      <input type="password" id="newPassword" placeholder="New Password" />
+      <button onclick="resetPassword()">Submit</button>
+      <p><button onclick="showLogin()">Back to Login</button></p>
     </div>
 
     <button class="toggle-theme-btn" onclick="toggleTheme()">🌓 Toggle Theme</button>
