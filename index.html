@@ -12,7 +12,10 @@
     <!-- Sign Up -->
     <div id="signup">
       <input type="email" id="email" placeholder="Email">
+      <div class="password-wrapper">
       <input type="password" id="password" placeholder="Password">
+      <span onclick="togglePassword('password', this)">👁️</span>
+    </div>
       <input type="text" id="username" placeholder="Username">
       <button onclick="signup()">Sign Up</button>
       <p>Already have an account? <button onclick="showLogin()">Log In</button></p>
@@ -21,7 +24,10 @@
     <!-- Log In -->
     <div id="login" style="display: none;">
       <input type="text" id="loginUsername" placeholder="Username">
+      <div class="password-wrapper">
       <input type="password" id="loginPassword" placeholder="Password">
+      <span onclick="togglePassword('loginPassword', this)">👁️</span>
+    </div>
       <button onclick="login()">Log In</button>
       <p>Don't have an account? <button onclick="showSignup()">Sign Up</button></p>
       <p><button onclick="showReset()" style="font-size: 0.9em; background: none; border: none; color: hotpink; cursor: pointer;">Forgot Password?</button></p>
@@ -32,7 +38,10 @@
       <h2>Reset Password</h2>
       <input type="text" id="resetUsername" placeholder="Username" />
       <input type="email" id="resetEmail" placeholder="Registered Email" />
-      <input type="password" id="newPassword" placeholder="New Password" />
+     <div class="password-wrapper">
+      <input type="password" id="newPassword" placeholder="New Password">
+      <span onclick="togglePassword('newPassword', this)">👁️</span>
+    </div>
       <button onclick="resetPassword()">Submit</button>
       <p><button onclick="showLogin()">Back to Login</button></p>
     </div>
