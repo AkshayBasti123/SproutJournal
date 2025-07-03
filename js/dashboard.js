@@ -21,6 +21,34 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem(dateKey, today);
     }
 
+    const affirmations = [
+  "You’re blooming beautifully 🌼",
+  "Every day is a new petal in your journey 🌸",
+  "Keep growing, even on cloudy days ☁️",
+  "You are rooted in strength and reaching for the sun ☀️",
+  "One step, one leaf at a time 🍃"
+];
+
+const tips = [
+  "Plants need sunlight, and so do you ☀️",
+  "A little water each day goes a long way 💧",
+  "Growth takes time, stay patient 🌱",
+  "Even wilted leaves can bloom again 🌿",
+  "Keep your roots strong and your petals proud 🌺"
+];
+
+const todayIndex = new Date().getDate() % affirmations.length;
+document.getElementById("daily-affirmation").textContent = affirmations[todayIndex];
+document.getElementById("daily-tip").textContent = tips[todayIndex];
+
+// 🌱 Update stats
+function updateStats() {
+  const entries = JSON.parse(localStorage.getItem(entriesKey)) || [];
+  const streak = parseInt(localStorage.getItem(`plant_stage_${currentUser}`)) || 1;
+  document.getElementById("stat-streak").textContent = `Streak: ${streak} day${streak > 1 ? 's' : ''}`;
+  document.getElementById("stat-entries").textContent = `Entries: ${entries.length}`;
+}
+    
     const imgPath = `images/hibiscus${currentStage}.png`;
     plantImg.src = imgPath;
     plantImg.alt = `Hibiscus stage ${currentStage}`;
@@ -109,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updatePlantStageIfNewDay();
   loadEntries();
+  updateStats()
 });
 
 function triggerConfetti() {
